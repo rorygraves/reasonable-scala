@@ -18,7 +18,8 @@ trait Names {
       if (value.isEmpty) false
       else if (value == "!=" || value == "<=" || value == ">=") false
       else {
-        val headOk = value.head != '=' && isSymbolicIdStart(value.head)
+        val headCh = value.charAt(0)
+        val headOk = headCh != '=' && isSymbolicIdStart(headCh)
         val lastOk = value.last == '='
         headOk && lastOk
       }
@@ -27,19 +28,22 @@ trait Names {
     def precedence: Int = {
       if (value.isEmpty || value.isOpAssignment) {
         0
-      } else if (isAlphanumericIdStart(value.head)) {
-        1
       } else {
-        value.head match {
-          case '|' => 2
-          case '^' => 3
-          case '&' => 4
-          case '=' | '!' => 5
-          case '<' | '>' => 6
-          case ':' => 7
-          case '+' | '-' => 8
-          case '*' | '/' | '%' => 9
-          case _ => 10
+        val headCh = value.charAt(0)
+        if (isAlphanumericIdStart(headCh)) {
+          1
+        } else {
+          headCh match {
+            case '|' => 2
+            case '^' => 3
+            case '&' => 4
+            case '=' | '!' => 5
+            case '<' | '>' => 6
+            case ':' => 7
+            case '+' | '-' => 8
+            case '*' | '/' | '%' => 9
+            case _ => 10
+          }
         }
       }
     }

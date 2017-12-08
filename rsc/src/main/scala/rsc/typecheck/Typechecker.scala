@@ -560,7 +560,7 @@ final class Typechecker private (
             }
             MethodType(tparams1, params1, ret1)
           case tpe: SimpleType =>
-            val i = tparams.indexWhere(_ == tpe.uid)
+            val i = tparams.indexOf(tpe.uid)
             if (i != -1) {
               targs(i)
             } else {
