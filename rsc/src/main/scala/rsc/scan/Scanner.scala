@@ -161,20 +161,24 @@ final class Scanner private (
     nextChar()
     (ch: @switch) match {
       case '/' =>
-        while (ch != CR && ch != LF && ch != FF && ch != SU) {
+        var curCh = ch
+        while (curCh != CR && curCh != LF && curCh != FF && curCh != SU) {
           nextChar()
+          curCh = ch
         }
         emit(COMMENT, null)
       case '*' =>
         nextChar()
-        while (ch != '*' || ch1 != '/') {
-          if (ch == SU) {
+        var curCh = ch
+        while (curCh != '*' || ch1 != '/') {
+          if (curCh == SU) {
             val message = reportOffset(offset, IllegalComment)
             emit(ERROR, message)
             return
           } else {
             nextChar()
           }
+          curCh = ch
         }
         nextChar()
         nextChar()

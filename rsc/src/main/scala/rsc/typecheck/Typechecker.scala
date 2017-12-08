@@ -327,9 +327,9 @@ final class Typechecker private (
                 case DefnTemplate(_, id, tparams, _, _, _) =>
                   lookup(id.uid).subst(tparams, targs)
                 case DefnType(_, _, tparams, tpt) =>
-                  loop(tpt.tpe.subst(tparams, targs))
+                  loop(TypecheckerTpeOps.tpe(tpt).subst(tparams, targs))
                 case tparam: TypeParam =>
-                  loop(tparam.hi.tpe)
+                  loop(TypecheckerTpeOps.tpe(tparam.hi))
               }
           }
         }
@@ -466,12 +466,12 @@ final class Typechecker private (
     }
   }
 
-  private implicit class TypecheckerTptOps(tpt: Tpt) {
-    def tpe: SimpleType = {
+  object TypecheckerTpeOps {
+    def tpe(tpt: Tpt): SimpleType = {
       tpt match {
         case TptApply(fun: TptPath, targs) =>
           if (fun.id.uid == NoUid) unreachable(fun)
-          else SimpleType(fun.id.uid, targs.map(_.tpe))
+          else SimpleType(fun.id.uid, targs.map(TypecheckerTpeOps.tpe))
         case _: TptApply =>
           unreachable(tpt)
         case tpt: TptPath =>
@@ -487,10 +487,10 @@ final class Typechecker private (
         case DefnDef(_, _, tparams, params, ret, _) =>
           val tpeTparams = tparams.map(_.id.uid)
           val tpeParams = params.map(_.id.uid)
-          val tpeRet = ret.tpe
+          val tpeRet = TypecheckerTpeOps.tpe(ret)
           MethodType(tpeTparams, tpeParams, tpeRet)
         case DefnField(_, _, tpt, _) =>
-          tpt.tpe
+          TypecheckerTpeOps.tpe(tpt)
         case DefnObject(_, id, _, _) =>
           SimpleType(id.uid, Nil)
         case DefnPackage(id: TermId, _) =>
@@ -500,7 +500,7 @@ final class Typechecker private (
         case pat: PatVar =>
           pat.tpe
         case TermParam(_, _, tpt) =>
-          tpt.tpe
+          TypecheckerTpeOps.tpe(tpt)
         case outline =>
           unreachable(outline)
       }
