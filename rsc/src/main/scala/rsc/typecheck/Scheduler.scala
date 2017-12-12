@@ -35,9 +35,9 @@ final class Scheduler private (
       outline: Outline): Uid = {
     val proposedUid = {
       owner match {
-        case _: FlatScope => owner.uid + id.sid.str
-        case _: PackageScope => owner.uid + id.sid.str
-        case _: TemplateScope => owner.uid + id.sid.str
+        case _: FlatScope => owner.uid + id.sid.uidStr
+        case _: PackageScope => owner.uid + id.sid.uidStr
+        case _: TemplateScope => owner.uid + id.sid.uidStr
       }
     }
     owner.enter(id.sid, proposedUid) match {

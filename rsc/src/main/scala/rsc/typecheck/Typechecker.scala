@@ -481,6 +481,8 @@ final class Typechecker private (
     }
   }
 
+  def termParamToUid(tParam: TermParam): Uid = tParam.id.uid
+
   private implicit class TypecheckerUidOps(uid: Uid) {
     def tpe: Type = {
       symtab.outlines(uid) match {

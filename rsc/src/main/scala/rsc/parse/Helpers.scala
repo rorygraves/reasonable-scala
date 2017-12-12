@@ -90,12 +90,26 @@ trait Helpers {
   }
 
   def tokenSeparated[T](separator: Int, part: => T): List[T] = {
-    val ts = List.newBuilder[T]
-    ts += part
-    while (in.token == separator) {
-      in.nextToken()
-      ts += part
-    }
-    ts.result
+
+    val first = part
+    if(in.token == separator) {
+      val ts = List.newBuilder[T]
+      ts += first
+      while (in.token == separator) {
+        in.nextToken()
+        ts += part
+      }
+      ts.result
+    } else
+      first :: Nil
+//    val ts = List.newBuilder[T]
+//    ts += part
+//    while (in.token == separator) {
+//      in.nextToken()
+//      ts += part
+//    }
+//    val res = ts.result
+//    println("XXX,"+ res.length)
+//    res
   }
 }

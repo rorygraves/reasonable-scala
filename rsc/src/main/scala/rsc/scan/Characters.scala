@@ -11,15 +11,16 @@ trait Characters {
   val chs: Array[Char] = input.chars
   var offset: Offset = 0
 
-  def ch: Char = getChar(offset)
-  def ch1: Char = getChar(offset + 1)
-  def ch2: Char = getChar(offset + 2)
-  private def getChar(offset: Offset): Char = {
+  @inline final def ch: Char = getChar(offset)
+  @inline final def ch1: Char = getChar(offset + 1)
+  @inline final def ch2: Char = getChar(offset + 2)
+
+  @inline private final def getChar(offset: Offset): Char = {
     if (offset < chs.length) chs(offset)
     else SU
   }
 
-  def nextChar(): Unit = {
+  @inline final def nextChar(): Unit = {
     if (offset < chs.length) {
       offset += 1
     }

@@ -105,9 +105,10 @@ final class Scanner private (
 
   private def alphanumericIdOrKeyword(): Unit = {
     nextChar()
-    if (isAlphanumericIdPart(ch)) {
+    val curCh = ch
+    if (isAlphanumericIdPart(curCh)) {
       alphanumericIdOrKeyword()
-    } else if (ch == '_') {
+    } else if (curCh == '_') {
       alphanumericSymbolicId()
     } else {
       emitIdOrKeyword()
@@ -438,8 +439,10 @@ final class Scanner private (
 
   private def whitespace(): Unit = {
     nextChar()
-    while (ch == ' ' || ch == '\t') {
+    var curCh = ch
+    while (curCh == ' ' || curCh == '\t') {
       nextChar()
+      curCh = ch
     }
     emit(WHITESPACE, null)
   }
